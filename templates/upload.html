@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Upload Files - Cloud Storage System</title>
+  <style>
+    body {
+      background-color: #4f2be1; /* Paler variant of dashboard background */
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 15px;
+      color: #333;
+      margin: 0;
+      padding: 2rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .upload-container {
+      background: #ffffff;
+      padding: 2rem 2.5rem;
+      border-radius: 10px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+      max-width: 420px;
+      width: 100%;
+      text-align: left;
+    }
+
+    h2 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 1.2rem;
+      color: #2a2a2a;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    input[type="file"] {
+      font-size: 0.95rem;
+    }
+
+    button {
+      background-color: #4285f4;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 5px;
+      color: white;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    ul.flash-messages {
+      list-style-type: none;
+      padding: 0;
+      margin: 1rem 0;
+      color: #d32f2f;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="upload-container">
+    <h2>Upload a File</h2>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class="flash-messages">
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('upload') }}" enctype="multipart/form-data">
+      <input type="file" name="file" required>
+      <button type="submit">Upload</button>
+    </form>
+  </div>
+</body>
+</html>

@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <title>Cloud Safe - Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid #667eea;
+            background: #667eea;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #667eea;
+            border: 1px solid #667eea;
+        }
+        
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        
+        .welcome-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .files-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .files-grid {
+            display: grid;
+            gap: 1rem;
+        }
+        
+        .file-card {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 12px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+        }
+        
+        .file-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+        
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .file-icon {
+            width: 40px;
+            height: 40px;
+            background: #667eea;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+        
+        .file-details h4 {
+            margin-bottom: 0.25rem;
+        }
+        
+        .file-meta {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .file-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn-small {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.8rem;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 2rem;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+        }
+        
+        .close {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .flash-messages {
+            position: fixed;
+            top: 4rem;
+            right: 1rem;
+            z-index: 1001;
+        }
+        
+        .flash-message {
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #667eea;
+            animation: slideIn 0.3s ease;
+        }
+        
+        .flash-message.error {
+            border-left-color: #e74c3c;
+        }
+        
+        .flash-message.success {
+            border-left-color: #27ae60;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .file-card {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .file-actions {
+                align-self: stretch;
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Flash Messages -->
+    <div class="flash-messages">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">
+                        {{ message }}
+                        <span class="close" onclick="this.parentElement.remove()">&times;</span>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <i class="fas fa-cloud"></i>
+            <span>Cloud Safe</span>
+        </div>
+        <nav class="user-info">
+            {% if picture %}
+                <img src="{{ picture }}" alt="Profile" class="user-avatar">
+            {% else %}
+                <div class="user-avatar">{{ name[0] if name else 'U' }}</div>
+            {% endif %}
+            <span>{{ name }}</span>
+            <!--<a href="/upload" class="btn btn-primary">
+                <i class="fas fa-upload"></i>
+                Upload File
+            </a>-->
+            <br>
+            <a href="/logout" class="btn btn-secondary">
+                <i class="fas fa-sign-out-alt"></i>
+                Logout
+            </a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Welcome Card -->
+        <div class="welcome-card">
+            <h1>Welcome back, {{ name.split()[0] if ' ' in name else name }}!</h1>
+            <p>Manage your files securely in the cloud. Upload, share, and organize with confidence.</p>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">{{ files|length }}</div>
+                <div class="stat-label">Total Files</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ "%.1f"|format((files|sum(attribute='size') or 0) / 1024 / 1024) }} MB</div>
+                <div class="stat-label">Storage Used</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ files|selectattr('updated')|list|length }}</div>
+                <div class="stat-label">Recent Uploads</div>
+            </div>
+        </div>
+
+        <!-- Files Section -->
+        <div class="files-section">
+            <div class="section-header">
+                <h2>
+                    <i class="fas fa-folder"></i>
+                    Your Files
+                </h2>
+                <a href="/upload" class="btn btn-primary">
+                    <i class="fas fa-plus"></i>
+                    Add New File
+                </a>
+            </div>
+
+            {% if files %}
+                <div class="files-grid">
+                    {% for file in files %}
+                        <div class="file-card">
+                            <div class="file-info">
+                                <div class="file-icon">
+                                    {% if file.name.lower().endswith(('.jpg', '.jpeg', '.png', '.gif')) %}
+                                        <i class="fas fa-image"></i>
+                                    {% elif file.name.lower().endswith(('.pdf')) %}
+                                        <i class="fas fa-file-pdf"></i>
+                                    {% elif file.name.lower().endswith(('.doc', '.docx')) %}
+                                        <i class="fas fa-file-word"></i>
+                                    {% elif file.name.lower().endswith(('.xls', '.xlsx')) %}
+                                        <i class="fas fa-file-excel"></i>
+                                    {% elif file.name.lower().endswith(('.zip', '.rar')) %}
+                                        <i class="fas fa-file-archive"></i>
+                                    {% elif file.name.lower().endswith(('.mp4', '.avi', '.mov')) %}
+                                        <i class="fas fa-file-video"></i>
+                                    {% elif file.name.lower().endswith(('.mp3', '.wav')) %}
+                                        <i class="fas fa-file-audio"></i>
+                                    {% else %}
+                                        <i class="fas fa-file"></i>
+                                    {% endif %}
+                                </div>
+                                <div class="file-details">
+                                    <h4>{{ file.name }}</h4>
+                                    <div class="file-meta">
+                                        {{ "%.1f"|format((file.size or 0)/ 1024) }} KB • 
+                                        <span class="utc-timestamp" data-utc="{{ file.updated.isoformat() }}">{{ file.updated }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="file-actions">
+                                <a href="/download/{{ file.blob_name }}" class="btn btn-secondary btn-small">
+                                    <i class="fas fa-download"></i>
+                                    Download
+                                </a>
+                                <a href="/file/{{ file.name }}/versions" class="btn btn-secondary btn-small">
+                                    <i class="fas fa-history"></i>
+                                    Versions
+                                </a>
+                                <a href="/preview/{{ file.blob_name }}" class="btn btn-secondary btn-small">
+                                    <i class="fas fa-eye"></i>
+                                    Preview
+                                </a>
+                                <button onclick="shareFile('{{ file.blob_name }}', '{{ file.name }}')" class="btn btn-secondary btn-small">
+                                    <i class="fas fa-share"></i>
+                                    Share
+                                </button>
+                                <button onclick="deleteFile('{{ file.blob_name }}', '{{ file.name }}')" class="btn btn-danger btn-small">
+                                    <i class="fas fa-trash"></i>
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <h3>No files yet</h3>
+                    <p>Upload your first file to get started!</p>
+                    <a href="/upload" class="btn btn-primary" style="margin-top: 1rem;">
+                        <i class="fas fa-upload"></i>
+                        Upload Your First File
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Share Modal -->
+    <div id="shareModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('shareModal')">&times;</span>
+            <h3><i class="fas fa-share"></i> Share File</h3>
+            <p>Share this secure link (expires in 7 days):</p>
+            <input type="text" id="shareUrl" readonly style="width: 100%; padding: 0.5rem; margin: 1rem 0; border: 1px solid #ddd; border-radius: 4px;">
+            <button onclick="copyToClipboard()" class="btn btn-primary">
+                <i class="fas fa-copy"></i>
+                Copy Link
+            </button>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('deleteModal')">&times;</span>
+            <h3><i class="fas fa-exclamation-triangle" style="color: #e74c3c;"></i> Delete File</h3>
+            <p>Are you sure you want to delete <strong id="deleteFileName"></strong>?</p>
+            <p style="color: #e74c3c; font-size: 0.9rem;">This action cannot be undone.</p>
+            <div style="margin-top: 1rem; display: flex; gap: 1rem; justify-content: flex-end;">
+                <button onclick="closeModal('deleteModal')" class="btn btn-secondary">Cancel</button>
+                <form id="deleteForm" method="POST" style="display: inline;">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentFilePath = '';
+        
+        function shareFile(filePath, fileName) {
+            fetch(`/share/${filePath}`, {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.url) {
+                    document.getElementById('shareUrl').value = data.url;
+                    document.getElementById('shareModal').style.display = 'block';
+                } else {
+                    alert('Failed to generate share link.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while sharing the file.');
+            });
+        }
+
+        function deleteFile(filePath, fileName) {
+            currentFilePath = filePath;
+            document.getElementById('deleteFileName').textContent = fileName;
+            document.getElementById('deleteForm').action = `/delete/${filePath}`;
+            document.getElementById('deleteModal').style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.utc-timestamp').forEach(el => {
+                const utc = el.dataset.utc;
+                if (!utc) return;
+
+                const date = new Date(utc);
+                const local = date.toLocaleString(undefined, {
+                    year: 'numeric', month: 'short', day: 'numeric',
+                    hour: '2-digit', minute: '2-digit',
+                    hour12: true,
+                });
+                el.textContent = local;
+            });
+        });
+
+        function copyToClipboard() {
+            const copyText = document.getElementById('shareUrl');
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); // For mobile devices
+            navigator.clipboard.writeText(copyText.value)
+                .then(() => alert("Link copied to clipboard!"))
+                .catch(err => alert("Failed to copy link"));
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const shareModal = document.getElementById('shareModal');
+            const deleteModal = document.getElementById('deleteModal');
+            if (event.target === shareModal) {
+                shareModal.style.display = "none";
+            }
+            if (event.target === deleteModal) {
+                deleteModal.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>

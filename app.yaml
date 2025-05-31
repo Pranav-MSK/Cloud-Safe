@@ -1,0 +1,14 @@
+runtime: python310  # or python311 if supported
+entrypoint: gunicorn -b :$PORT app:app
+
+instance_class: F2
+
+env_variables:
+  OAUTHLIB_INSECURE_TRANSPORT: "0"
+  
+handlers:
+- url: /static
+  static_dir: static
+
+- url: /.*
+  script: auto

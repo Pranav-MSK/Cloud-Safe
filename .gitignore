@@ -1,0 +1,15 @@
+# Secret keys (DO NOT COMMIT THESE)
+client_secret.json
+service_account.json
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+
+# Environment config file 
+.env

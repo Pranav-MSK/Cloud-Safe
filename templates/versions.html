@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>File Versions - {{ filename }}</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      padding: 2rem;
+      color: #333;
+    }
+    h1 {
+      color: #667eea;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1.5rem;
+    }
+    th, td {
+      padding: 12px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+    th {
+      background-color: #667eea;
+      color: white;
+    }
+    tr:hover {
+      background-color: #f1f1f1;
+    }
+    .btn {
+      background: #667eea;
+      color: white;
+      padding: 6px 12px;
+      text-decoration: none;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+    .btn:hover {
+      background: #5a6fd8;
+    }
+  </style>
+</head>
+<body>
+  <h1 style="text-align:center">Version History for: {{ filename }}</h1>
+  {% if versions %}
+    <table>
+      <thead>
+        <tr>
+          <th>Version ID (Generation)</th>
+          <th>Created</th>
+          <th>Size (KB)</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for version in versions %}
+            {% if loop.index0 == 0 %}
+                <tr style="background-color: #e3f2fd; font-weight: bold;">
+            {% else %}
+                <tr>
+            {% endif %}
+                <td>{{ version.version }}</td>
+                <td><span class="utc-timestamp" data-utc="{{ version.created.isoformat() }}">{{ version.created }}</span></td>
+                <td>{{ "%.1f"|format(version.size / 1024) }}</td>
+                <td>
+                <a href="{{ url_for('download_version', blob_name=version.blob_name, generation=version.version) }}" class="btn">Download</a>
+                <form method="POST"
+                        action="{{ url_for('restore_version', blob_name=version.blob_name, generation=version.version) }}"
+                        style="display:inline;"
+                        onsubmit="event.preventDefault(); confirmRestore(this, '{{ version.version }}');">
+                    <button type="submit" class="btn btn-secondary btn-small">Restore</button>
+                </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+  {% else %}
+    <br><br><h2 style="text-align:center">No versions found for this file.</h2>
+  {% endif %}
+    <script>
+        function confirmRestore(form, version) {
+            const confirmed = confirm(`Are you sure you want to restore version ${version}? This will replace the current file.`);
+            if (confirmed) {
+                form.submit();
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+          const timestamps = document.querySelectorAll(".utc-timestamp");
+          timestamps.forEach(span => {
+              const utc = span.getAttribute("data-utc");
+              if (utc) {
+                const date = new Date(utc);
+                const options = {
+                    year: 'numeric', month: '2-digit', day: '2-digit',
+                    hour: '2-digit', minute: '2-digit', second: '2-digit',
+                    hour12: true
+                };
+                span.textContent = date.toLocaleString(undefined, options);
+            }
+          });
+        });
+    </script>
+</body>
+</html>
