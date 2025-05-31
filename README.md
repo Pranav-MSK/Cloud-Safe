@@ -37,19 +37,25 @@ Cloud Safe is a secure cloud-based file storage system built with Python (Flask)
 ## 🚀 Getting Started (Local Setup)
 
 ### 1. Clone the repo
+```bash
 git clone https://github.com/Pranav-MSK/Cloud-Safe.git
 cd cloud-safe
+```
 
 ---
 
 ### 2. Create virtual environment
+```bash
 python -m venv venv
 venv\Scripts\activate  <!--For Windows-->
+```
 
 ---
 
 ### 3. Install dependencies
+```bash
 pip install -r requirements.txt
+```
 
 ---
 
@@ -60,18 +66,22 @@ service_account.json – GCP service account key
 
 .env – environment variables (example below)
 #### Sample .env file
+```yaml
 FLASK_SECRET_KEY=your-secret-key
 REDIRECT_URI=http://localhost:5000/oauth2callback 
+```
 
 ---
 
 ### 5. Run the app locally
+```bash
 python app.py 
+```
 
 ---
 
 ## 📁 Project Structure
-
+```graphql
 Cloud-Safe/
 │
 ├── app.py                  # Main Flask app
@@ -82,6 +92,7 @@ Cloud-Safe/
 ├── .gitignore              # Git ignored files
 ├── .gcloudignore           # Files excluded during GCP deploy
 └── README.md               # Project readme
+```
 
 ---
 
@@ -89,14 +100,20 @@ Cloud-Safe/
 Download Google Cloud SDK. Run these in the shell
 
 ### Authenticate & set project:
+```bash
 gcloud auth login
 gcloud config set project [your-gcp-project-id]
+```
 
 ### Deploy:
+```bash
 gcloud app deploy
+```
 
 ### Visit your app
+```bash
 gcloud app browse
+```
 
 ---
 
