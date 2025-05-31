@@ -60,11 +60,11 @@ pip install -r requirements.txt
 ---
 
 ### 4. Add secrets (not included in repo)
-client_secret.json – Google OAuth client credentials 
-service_account.json – GCP service account key
+- client_secret.json – Google OAuth client credentials 
+- service_account.json – GCP service account key
 <!--Both json files can be downloaded from your Google Cloud Console of your Project-->
 
-.env – environment variables (example below)
+- .env – environment variables (example below)
 #### Sample .env file
 ```yaml
 FLASK_SECRET_KEY=your-secret-key
@@ -119,18 +119,18 @@ gcloud app browse
 
 ## 🔒 Note on Security
 For safety, this repo does not include:
-client_secret.json
-service_account.json
-.env
-These should be created manually during local testing and must not be shared publicly.
+- client_secret.json
+- service_account.json
+- .env
+*These should be created manually during local testing and must not be shared publicly.*
 
 ---
 
 ## 📧 Author
-Name: Pranav M S Krishnan
-Username: Pranav-MSK
-Profile :- https://github.com/Pranav-MSK
-Repository :- https://github.com/Pranav-MSK/Cloud-Safe
-App Deployed at:- https://cloud-storage-system-460210.uc.r.appspot.com
+- Name: Pranav M S Krishnan
+- Username: Pranav-MSK
+- Profile :- https://github.com/Pranav-MSK
+- Repository :- https://github.com/Pranav-MSK/Cloud-Safe
+- App Deployed at:- https://cloud-storage-system-460210.uc.r.appspot.com
 
 -----------
