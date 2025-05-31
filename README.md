@@ -61,9 +61,7 @@ pip install -r requirements.txt
 
 ### 4. Add secrets (not included in repo)
 - client_secret.json – Google OAuth client credentials 
-- service_account.json – GCP service account key
-<!--Both json files can be downloaded from your Google Cloud Console of your Project-->
-
+- service_account.json – GCP service account key <!--Both json files can be downloaded from your Google Cloud Console of your Project-->
 - .env – environment variables (example below)
 #### Sample .env file
 ```yaml
@@ -122,7 +120,8 @@ For safety, this repo does not include:
 - client_secret.json
 - service_account.json
 - .env
-*These should be created manually during local testing and must not be shared publicly.*
+
+***These should be created manually during local testing and must not be shared publicly.***
 
 ---
 
